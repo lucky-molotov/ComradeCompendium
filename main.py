@@ -246,6 +246,31 @@ def search_by_location():
     print(pt)
     conn.close()
 
+def search_by_relation():
+    relation = input("Search By Relation: ")
+
+    conn = sqlite3.connect('comrade.db')
+    cursor = conn.cursor()
+    query = "SELECT * FROM comrade WHERE LOWER(relation) LIKE LOWER(?)"
+    cursor.execute(query, ('%' + relation.lower() + '%',))
+    rows = cursor.fetchall()
+
+    pt = PrettyTable(['ID', 'Name', 'Surname', 'Contact Number', 'Email', 'Date of Birth', 'Relation', 'Location'])
+    pt.align["ID"] = "l"
+    pt.align["Name"] = "l"
+    pt.align["Surname"] = "l"
+    pt.align["Contact Number"] = "l"
+    pt.align["Email"] = "l"
+    pt.align["Date of Birth"] = "l"
+    pt.align["Relation"] = "l"
+    pt.align["Location"] = "l"
+
+    for row in rows:
+        pt.add_row(row)
+
+    print(pt)
+    conn.close()
+
 def delete_comrade():
     conn = sqlite3.connect('comrade.db')
     cursor = conn.cursor()
@@ -268,9 +293,10 @@ def menu():
         print("5. Search by Surname")
         print("6. Search by Full Name")
         print("7. Search by Email")
-        print("8. Search by Location")
-        print("9. Delete Comrade")
-        print("10. Exit")
+        print("8. Search by Relation")
+        print("9. Search by Location")
+        print("10. Delete Comrade")
+        print("Q. Exit")
 
         choice = input("Enter your choice: ")
 
@@ -289,9 +315,9 @@ def menu():
         elif choice == '7':
             search_by_email()
         elif choice == '8':
-            search_by_location()
+            search_by_relation()
         elif choice == '9':
-            delete_comrade()
+            search_by_location()
         elif choice == '10':
             break
         else:
