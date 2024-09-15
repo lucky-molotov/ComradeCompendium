@@ -212,6 +212,32 @@ class search():
         print(pt)
         conn.close()
 
+    def by_date_of_birth():        
+        date_of_birth = input("Search By Date of Birth: ").lower()
+        name, surname = date_of_birth.split()
+
+        conn = sqlite3.connect('comrade.db')
+        cursor = conn.cursor()
+        query = "SELECT * FROM comrade WHERE LOWER(name) = ?"
+        cursor.execute(query, (date_of_birth))
+        rows = cursor.fetchall()
+
+        pt = PrettyTable(['ID', 'Name', 'Surname', 'Contact Number', 'Email', 'Date of Birth', 'Relation', 'Location'])
+        pt.align["ID"] = "l"
+        pt.align["Name"] = "l"
+        pt.align["Surname"] = "l"
+        pt.align["Contact Number"] = "l"
+        pt.align["Email"] = "l"
+        pt.align["Date of Birth"] = "l"
+        pt.align["Relation"] = "l"
+        pt.align["Location"] = "l"
+
+        for row in rows:
+            pt.add_row(row)
+
+        print(pt)
+        conn.close()
+
     def by_email():
         email = input("Search By Email: ")
 
@@ -295,10 +321,11 @@ def menu():
         print("4. Search by Name")
         print("5. Search by Surname")
         print("6. Search by Full Name")
-        print("7. Search by Email")
-        print("8. Search by Relation")
-        print("9. Search by Location")
-        print("10. Delete Comrade")
+        print("7. Search by Date of Birth (YYYY-MM-DD)")
+        print("8. Search by Email")
+        print("9. Search by Relation")
+        print("10. Search by Location")
+        print("11. Delete Comrade")
         print("Q. Exit")
 
         choice = input("Enter your choice: ")
@@ -316,12 +343,14 @@ def menu():
         elif choice == '6':
             search.by_full_name()
         elif choice == '7':
-            search.by_email()
+            search.by_date_of_birth()
         elif choice == '8':
-            search.by_relation()
+            search.by_email()
         elif choice == '9':
-            search.by_location()
+            search.by_relation()
         elif choice == '10':
+            search.by_location()
+        elif choice == '11':
             comrade.delete()
         elif choice == 'q':
             quit()
