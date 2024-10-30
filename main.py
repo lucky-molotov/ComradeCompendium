@@ -27,18 +27,18 @@ conn.close()
 
 class comrade():
     def create_new():
+        """Add a new comrade to the database"""
         conn = sqlite3.connect('comrade.db')
         cursor = conn.cursor()
 
-        name = input("Input the Name: ").capitalize()
-        surname = input("Input the Surname: ").capitalize()
-        contact_number = input("Input the contact number with international code: ")
-        email = input("Input the e-mail: ").lower()
-        date_of_birth = input("Input date of birth (YYYY-MM-DD): ")
-        relation = input("What is the relation: ")
-        location = input("Where do they live: ")
+        name = input('Name: ').capitalize()
+        surname = input('Surname: ').capitalize()
+        contact_number = input('Contact number (with international code): ')
+        email = input('Email: ').lower()
+        date_of_birth = input('Date of birth (YYYY-MM-DD): ')
+        relation = input('Relation: ')
+        location = input('Location: ')
 
-        # Insert data into database
         query = """
         INSERT INTO comrade (name, surname, contact_number, email, date_of_birth, relation, location)
         VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -47,7 +47,7 @@ class comrade():
         conn.commit()
         conn.close()
 
-        print("New comrade added successfully!")
+        print('New comrade added successfully!')
 
     def create_new_random():
         conn = sqlite3.connect('comrade.db')
@@ -99,40 +99,53 @@ class comrade():
         conn.close()
         print("New random comrade added successfully!")
 
-    def delete():
-        conn = sqlite3.connect('comrade.db')
-        cursor = conn.cursor()
+    def delete_comrade():
+        """Delete a comrade from the database by ID"""
+        connection = sqlite3.connect('comrade.db')
+        cursor = connection.cursor()
 
-        comrade_id = input("Enter the ID of the comrade to delete: ")
+        comrade_id = input("Enter the ID of the comrade to delete: ").strip()
         query = "DELETE FROM comrade WHERE id = ?"
         cursor.execute(query, (comrade_id,))
-        conn.commit()
-        conn.close()
+        connection.commit()
+        connection.close()
 
-        print("Comrade deleted successfully!")
+        print("Comrade deleted successfully.")
             
-    def view_all():
-        conn = sqlite3.connect('comrade.db')
-        cursor = conn.cursor()
+    def view_all_comrades():
+        """
+        View all comrades in the database
+        """
+        connection = sqlite3.connect('comrade.db')
+        cursor = connection.cursor()
         query = "SELECT * FROM comrade"
         cursor.execute(query)
-        rows = cursor.fetchall()
+        comrades = cursor.fetchall()
 
-        pt = PrettyTable(['ID', 'Name', 'Surname', 'Contact Number', 'Email', 'Date of Birth', 'Relation', 'Location'])
-        pt.align["ID"] = "l"
-        pt.align["Name"] = "l"
-        pt.align["Surname"] = "l"
-        pt.align["Contact Number"] = "l"
-        pt.align["Email"] = "l"
-        pt.align["Date of Birth"] = "l"
-        pt.align["Relation"] = "l"
-        pt.align["Location"] = "l"
+        table = PrettyTable([
+            'ID',
+            'Name',
+            'Surname',
+            'Contact Number',
+            'Email',
+            'Date of Birth',
+            'Relation',
+            'Location'
+        ])
+        table.align["ID"] = "l"
+        table.align["Name"] = "l"
+        table.align["Surname"] = "l"
+        table.align["Contact Number"] = "l"
+        table.align["Email"] = "l"
+        table.align["Date of Birth"] = "l"
+        table.align["Relation"] = "l"
+        table.align["Location"] = "l"
 
-        for row in rows:
-            pt.add_row(row)
+        for comrade in comrades:
+            table.add_row(comrade)
 
-        print(pt)
-        conn.close()
+        print(table)
+        connection.close()
 
 class search():
     
